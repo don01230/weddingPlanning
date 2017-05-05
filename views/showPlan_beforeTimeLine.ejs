@@ -1,0 +1,166 @@
+<!-- views/profile.ejs -->
+<!-- testing bitbucket -->
+<!doctype html>
+<html>
+
+<head>
+	<title>Node Authentication</title>
+	<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css">
+	<link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css">
+	<link rel="stylesheet" type="text/css" href="/stylesheets/star.css" />
+	<!--dropzone api-->
+	<script src="/js/dropzone.js"></script>
+	<link rel="stylesheet" href="https://rawgit.com/enyo/dropzone/master/dist/dropzone.css">
+	<!-- google map api<script src="/js/googlemap.js"></script>-->
+	<script src="/js/googlemap.js"></script>
+	<meta name="viewport" content="initial-scale=1.0, user-scalable=no"/>
+	<link rel="stylesheet" type="text/css" href="/stylesheets/googlemap.css">
+	<meta charset="utf-8"/>
+	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAsc5-pXyNy6vcLP5wumGcT8eB6l2muZ8o&libraries=places&callback=initialize"
+	     async defer></script>
+	<style>
+		body {
+			padding-top: 80px;
+			word-wrap: break-word;
+		}
+	</style>
+</head>
+
+<body onload="initialize">
+	<div class="container">
+		<div class="page-header text-center">
+			<h1><span class="fa fa-anchor"></span> Plan Detail Page</h1>
+			<a href="/userplanslist" class="btn btn-default btn-sm">Back</a>
+		</div>
+		<div class="row">
+			<!-- LOCAL INFORMATION -->
+			<div class="col-sm-6">
+				<div class="well">
+					<h3><span class="fa fa-user"></span>Create By : <%= planOwner.local.username %></h3>
+					<form action="/plans/<%=plan._id %>" method="post">
+						<%if (planOwner.local.username!=user.local.username){%>
+							<fieldset disabled>
+						<%}%>
+						<div class="form-group">
+							<label>Plan Name</label>
+							<input type="planName" class="form-control" name="planName" value=<%= plan.planName%>>
+						</div>
+						<p>
+							<strong>Plan Create Time</strong>:
+							<%= plan.planTime %><br>
+								<strong>Plan Update Time</strong>:
+								<%= plan.updateTime %><br>
+						</p>
+						<div class="form-group">
+						<label>Private</label>
+						<%if (plan.private==true){%>
+							<input type="checkbox" class="form-control" id="private" name="private" checked>
+							<%} %>
+						<%if (plan.private==false){%>
+							<input type="checkbox" class="form-control" id="private" name="private">
+							<%} %>
+					</div>
+					<%if (planOwner.local.username==user.local.username){%>
+						<button type="submit" class="btn btn-danger">Save</button>
+					<%}%>
+						<%if (planOwner.local.username!=user.local.username){%>
+							</fieldset>
+						<%}%>
+					</form>
+				</div>
+			</div>
+			<div class="col-sm-6">
+				<%if (planOwner.local.username==user.local.username){%>
+					<a href="<%=plan.id %>/createactivity" class="btn btn-default" role="button">Create Activity</a>
+				<%}%>
+				<input id="a-length" name="activityLength" type="hidden" value="<%= activity.length %>">
+				<% activity.forEach(function(detail){%>
+					<h2><span class="fa fa-user-o">
+			<%= detail.activitySub %>
+			<!--<a href="/updateActivity/<%= detail.id %>" role=button>Edit</a>-->
+			<%if (planOwner.local.username==user.local.username){%>
+				<button type="button" class="btn btn-danger" onclick="location.href='/plans/<%= plan.id %>/updateActivity/<%= detail.id %>';">
+					Update
+				</button>
+				<button type="button" class="btn btn-default btn-sm" onclick="location.href='/plans/<%= plan.id %>/delActivity/<%= detail.id %>';">
+					Delete
+				</button>
+			<%}%>
+		</h2>
+					<p>Content :
+						<%= detail.activityContent %>
+					</p>
+					<p>Time :
+						<%= detail.activityTime %>
+					</p>
+					<p>Location :
+						<%= detail.activityLoc %>
+					</p>
+					<input id="loc-input<%= activity.indexOf(detail) %>" name="acitivityLoc" type="hidden" value="<%= detail.activityLoc %>">
+					<p>latitude:<%-JSON.stringify(geo)%></p>
+					<p><%= activity.indexOf(detail) %></p>
+					<div id="map<%= activity.indexOf(detail) %>" style="height: 300px; width: 100%;"></div>
+					<p>Cost :
+						<%= detail.activityCost %>
+					</p>
+					<p>Rating :
+						<%= detail.userRating %>
+					</p>
+					<p>Public Rating :
+						<%= detail.publicRating/detail.ratingTotal %>
+					</p>
+					<p>Images : </p>
+					<% images.forEach(function(image) { %>
+						<% if (image.activityID.equals(detail.id)) { %>
+							<img class="pic" src="\images\activity\<%=image.imageName %>"  >
+							<img class="picbig" src="\images\activity\<%=image.imageName %>" >
+							<% } %>
+								<% }); %>
+					<!--dropzone photo upload-->
+					<%if (planOwner.local.username==user.local.username){%>
+						<form  action="/plans/<%= plan.id %>/uploadActivityImg" class="dropzone">
+							<input type="hidden" name="activityID" value="<%= detail.id %>">
+							<div class="fallback">
+								<input name="file" type="file">
+							</div>
+						</form>
+					<%}%>
+					<p>Comment : </p>
+					<% comments.forEach(function(comment) { %>
+						<% if (comment.activityID.equals(detail.id)) { %>
+							<p>
+								<%= comment.comments %>
+									<%= moment(comment.date).format('MMMM Do YYYY, h:mm:ss a') %>
+							</p>
+							<% } %>
+								<% }); %>
+									<p>
+										<form name="addcomment" action="/plans/<%=plan.id %>/comment" method="post">
+											<div class="stars">
+	    								<input class="star star-5" id="star-5" type="radio" name="star" value=5>
+	    								<label class="star star-5" for="star-5"></label>
+	   									<input class="star star-4" id="star-4" type="radio" name="star" value=4>
+	    								<label class="star star-4" for="star-4"></label>
+	    								<input class="star star-3" id="star-3" type="radio" name="star" value=3>
+	    								<label class="star star-3" for="star-3"></label>
+	   									<input class="star star-2" id="star-2" type="radio" name="star" value=2>
+	    								<label class="star star-2" for="star-2"></label>
+	    								<input class="star star-1" id="star-1" type="radio" name="star" value=1>
+	    								<label class="star star-1" for="star-1"></label>
+											</div>
+											<br>
+											<textarea id="comments" name="comments" placeholder="Enter Comment"></textarea>
+											<input type="hidden" name="activityID" value="<%= detail.id %>">
+											<input type="submit" class="btn btn-danger" value="Comment"></input>
+									</p>
+									</form>
+									<% }); %>
+
+			</div>
+
+		</div>
+
+	</div>
+</body>
+
+</html>

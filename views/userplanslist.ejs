@@ -1,0 +1,58 @@
+<!-- === BEGIN HEADER === -->
+<!DOCTYPE html>
+<!--[if IE 8]> <html lang="en" class="ie8"> <![endif]-->
+<!--[if IE 9]> <html lang="en" class="ie9"> <![endif]-->
+<!--[if !IE]><!-->
+<html lang="en">
+<!--<![endif]-->
+
+<head>
+	<%- include ../partials/header.ejs %>
+</head>
+
+<body>
+	<%- include ../partials/openBody.ejs %>
+
+		<div class="container">
+			<table class="table">
+				<tr>
+					<th>
+						<h3><strong>Plan</strong></h3></th>
+					<th>
+						<h3><strong>Create Time</strong></h3></th>
+					<th>
+						<h3><strong>Update Time</strong></h3></th>
+					<th>
+						<h3><strong>Status</strong></h3></th>
+					<th>
+						<h3><strong></strong></h3></th>
+					<th>
+						<h3><strong></strong></h3></th>
+				</tr>
+				<% plan.forEach(function(plan){%>
+					<tr>
+						<td>
+							<%=plan.planName %>
+								</a>
+						</td>
+						<td>
+							<%= moment(plan.planTime).format('Do MMMM YYYY,h:mm a') %>
+						</td>
+						<td>
+							<%= moment(plan.updateTime).format('Do MMMM YYYY,h:mm a') %>
+						</td>
+						<% if(plan.private==true){ %>
+							<td>Private</td>
+							<% } else{ %>
+								<td>Public</td>
+								<% } %>
+									<td><a href="plans/<%=plan.id %>" class="btn btn-default" role="button">View</a></td>
+									<td><a href="plandelete/<%=plan.id %>" onclick="return confirm('Are you sure you want to Remove?');" class="btn btn-default" role="button" method="delete">Delete</a></td>
+					</tr>
+					<% }); %>
+			</table>
+
+		<%- include ../partials/closeBody.ejs %>
+</body>
+
+</html>

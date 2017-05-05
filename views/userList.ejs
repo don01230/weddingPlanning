@@ -1,0 +1,178 @@
+<!-- views/signup.ejs -->
+<!doctype html>
+<html>
+<head>
+  <% include ../partials/header %>
+  <!-- Include Required Prerequisites -->
+  <script type="text/javascript" src="//cdn.jsdelivr.net/jquery/1/jquery.min.js"></script>
+  <script type="text/javascript" src="//cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/bootstrap/3/css/bootstrap.css" />
+  <style>
+    div.table-title {
+      display: block;
+      margin: auto;
+      max-width: 600px;
+      padding:5px;
+      width: 100%;
+    }
+    .table-fill {
+      background: white;
+      border-radius:3px;
+      border-collapse: collapse;
+      height: 320px;
+      margin: auto;
+      max-width: 600px;
+      padding:5px;
+      width: 100%;
+      box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+      animation: float 5s infinite;
+    }
+    th {
+      color:#666B85;;
+      background:#FFE4E1;
+      border-bottom:4px solid #9ea7af;
+      border-right: 1px solid #9ea7af;
+      font-size: 18px;
+      font-weight: 100;
+      padding:5px 24px;
+      text-align:center;
+      vertical-align:middle;
+    }
+    th:first-child { border-top-left-radius:3px; }
+    th:last-child {
+      border-top-right-radius:3px;
+      border-right:none;
+    }
+    tr {
+      border-top: 1px solid #C1C3D1;
+      border-bottom-: 1px solid #C1C3D1;
+      color:#666B85;
+      font-size:14px;
+      font-weight:normal;
+    }
+    tr:first-child { border-top:none; }
+    tr:last-child { border-bottom:none; }
+    tr:last-child td:first-child { border-bottom-left-radius:3px; }
+    tr:last-child td:last-child { border-bottom-right-radius:3px; }
+    td {
+      background:#FFFFFF;
+      padding: 5px 20px;
+      text-align: center;
+      vertical-align:middle;
+      font-weight:300;
+      font-size:14px;
+      border-right: 1px solid #C1C3D1;
+    }
+    td:last-child { border-right: 0px; }
+    th.text-left { text-align: left; }
+    th.text-center { text-align: center; }
+    th.text-right { text-align: right; }
+    td.text-left { text-align: left; }
+    td.text-center { text-align: center; }
+    td.text-right { text-align: right; }
+
+    .input-group-addon {
+      background-color: #FFE4E1;
+    }
+    .btn-love{
+      background-color: #FFE4E1;
+      border-color: #ccc;
+    }
+    @media
+    only screen and (max-width: 760px){
+    	table, thead, tbody, th, td, tr {
+    		display: block;
+    	}
+    	thead tr {
+    		position: absolute;
+    		top: -9999px;
+    		left: -9999px;
+    	}
+    	tr { border: 1px solid #ccc; }
+    	td {
+    		/* Behave  like a "row" */
+    		border: none;
+    		border-bottom: 1px solid #eee;
+    		position: relative;
+    		padding-left: 50%;
+    	}
+    	td:before {
+    		/* Now like a table header */
+    		position: absolute;
+    		/* Top/left values mimic padding */
+    		top: 6px;
+    		left: 6px;
+    		width: 45%;
+    		padding-right: 10px;
+    		white-space: nowrap;
+    	}
+      table td:before {
+        content: attr(data-label);
+      }
+    }
+  </style>
+</head>
+<body>
+  <% include ../partials/openBody %>
+  <div class="container" style="padding-bottom: 30px;"><div class="margin-vert-30"><div class="col-md-10 col-md-offset-1 signup-page">
+  	<h1><span class="fa fa-pencil-square-o"></span>User List</h1>
+    <form method="post" id="toSearch">
+      <div class="row" id="nsBar">
+        <div class="col-md-5">
+          <input type="text" class="form-control" name="name" id="name" value="<%= searchSettingHash['name'] %>" placeholder="Serach name...." style="width: 100%" value="<%= searchSettingHash["name"] %>"/>
+        </div>
+        <div class="col-md-2" id="largeScreenSubmit" style="display: initial;">
+          <div class="input-group-btn">
+            <button class="btn btn-love" type="submit"style="border-radius: 4px">Search</button>
+          </div>
+        </div>
+      </div>
+      <hr style="clear: left">
+      <table style="width: 100%" class="outter">
+        <thead>
+          <th style="width: 32%;">Image</th>
+          <th style="width: 32%;">Name</th>
+          <th style="width: 32%;">Gender</th>
+        </thead>
+        <!-- shows the information for the user  -->
+        <% for(var i=0; i<listOfUser.length; i++) { %>
+          <tr>
+            <td data-label="Image" style="text-align: -webkit-center"><img src="/images/<%=listOfUser[i].local.image%>" style="width: 90px; height: 90px; margin-bottom: 0px;" class="img-responsive img-circle margin-bottom-20"></td>
+            <td data-label="Name"><%= listOfUser[i].local.username %></td>
+            <td data-label="Gender"><%= listOfUser[i].local.gender %></td>
+          </tr>
+            <table style="width: 100%">
+              <thead>
+                <th style="width: 32%;">Plan Name</th>
+                <th style="width: 32%;">Update Time</th>
+                <th style="width: 32%;">Plan Time</th>
+              </thead>
+              <!-- show plans under this user -->
+              <% for(var j=0; j<listOfPlan[listOfUser[i]._id].length; j++) { %>
+                <tr>
+                  <td data-label="Plan Name"><a href="http://localhost:3000/plans/<%= listOfPlan[listOfUser[i]._id][j]._id %>"><%= listOfPlan[listOfUser[i]._id][j].planName %></a></td>
+                  <td data-label="Update Time" class="tempUpdateTime"><%=listOfPlan[listOfUser[i]._id][j].updateTime %></td>
+                  <td data-label="Plan Time" class="tempUpdateTime"><%=listOfPlan[listOfUser[i]._id][j].planTime %></td>
+                </tr>
+              <% }%>
+            </table>
+        <% }%>
+      </table>
+  </div></div>
+  <% include ../partials/closeBody %>
+</body>
+<script>
+  var monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+  $(document).ready(function(){
+    // make time in dd-MMM-YYYY format
+    $( "td.tempUpdateTime" ).each(function( index ) {
+      var tempDate = new Date($(this).text());
+      var mm = tempDate.getMonth();
+      var dd = tempDate.getDate();
+      dd > 9 ? dd = dd : dd = '0' + dd;
+      var yyyy = tempDate.getFullYear();
+      $(this).text(dd + "-" + monthNames[mm] + "-" + yyyy);
+    });
+  });
+</script>
+</html>

@@ -1,0 +1,282 @@
+<!-- === BEGIN HEADER === -->
+<!DOCTYPE html>
+<html>
+
+<head>
+	<%- include ../partials/header.ejs %>
+		<link rel="stylesheet" type="text/css" href="/stylesheets/timeline.css" />
+		<link rel="stylesheet" type="text/css" href="/stylesheets/star.css" />
+		<!--dropzone api-->
+		<script src="/js/dropzone.js"></script>
+		<link rel="stylesheet" type="text/css" href="/stylesheets/dropzone.css" />
+		<!-- google map api-->
+		<script src="/js/googlemap.js"></script>
+		<meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+		<link rel="stylesheet" type="text/css" href="/stylesheets/googlemap.css">
+		<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAsc5-pXyNy6vcLP5wumGcT8eB6l2muZ8o&libraries=places" async defer></script>
+		<!--fancybox-->
+		<link rel="stylesheet" type="text/css" media="screen" href="http://cdnjs.cloudflare.com/ajax/libs/fancybox/1.3.4/jquery.fancybox-1.3.4.css" />
+		<script type="text/javascript" src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+		<script type="text/javascript" src="http://code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+		<script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/fancybox/1.3.4/jquery.fancybox-1.3.4.pack.min.js"></script>
+		<link rel="stylesheet" type="text/css" href="/stylesheets/fancybox.css" />
+		<script type="text/javascript">
+			$(function($) {
+				var addToAll = false;
+				var gallery = false;
+				var titlePosition = 'inside';
+				$(addToAll ? 'img' : 'img.fancybox').each(function() {
+					var $this = $(this);
+					var title = $this.attr('title');
+					var src = $this.attr('data-big') || $this.attr('src');
+					var a = $('<a href="#" class="fancybox"></a>').attr('href', src).attr('title', title);
+					$this.wrap(a);
+				});
+				if (gallery)
+					$('a.fancybox').attr('rel', 'fancyboxgallery');
+				$('a.fancybox').fancybox({
+					titlePosition: titlePosition
+				});
+			});
+			$.noConflict();
+		</script>
+
+		<!--checkbox toggle css-->
+		<link rel="stylesheet" type="text/css" href="/stylesheets/checkbox.css" />
+</head>
+
+<body>
+	<%- include ../partials/openBody.ejs %>
+		<div class="container">
+			<div class="page-header text-center">
+				<h1><span class="fa fa-anchor"></span> Plan Detail</h1>
+			</div>
+			<%if (planOwner.local.username==user.local.username){%>
+				<div id="form" class="container">
+					<form action="/plans/<%=plan._id %>" method="post" class="form-horizontal">
+						<div class="form-group">
+							<label class="control-label col-sm-3">Plan Name:</label>
+							<div class="col-sm-9"><input type="planName" class="form-control transparent-input" name="planName" value=<%=plan.planName%>></div>
+						</div>
+						<div class="form-group">
+							<label class="control-label col-sm-3">Plan Creater:</label>
+							<div class="col-sm-9"><label class="form-control transparent-input"><%= planOwner.local.username %></label></div>
+						</div>
+						<div class="form-group">
+							<label class="control-label col-sm-3">Plan Create Time:</label>
+							<div class="col-sm-9"><label class="form-control transparent-input"><%= moment(plan.planTime).format('MMMM Do YYYY, h:mm:ss a') %></label></div>
+						</div>
+						<div class="form-group">
+							<label class="control-label col-sm-3">Share Status:</label>
+							<div class="col-sm-3">
+								<%if (plan.private==true){%>
+									<label class="tgl" style="font-size:15px">
+								<input type="checkbox" id="private" name="private" checked>
+									<span data-on="Private" data-off="Public"></span>
+								</label>
+									<%} %>
+										<%if (plan.private==false){%>
+										<label class="tgl" style="font-size:15px">
+										<input type="checkbox" id="private" name="private" ><span data-on="Private" data-off="Public"></span>
+										</label>
+											<%} %>
+							</div>
+						</div>
+						<button type="submit" class="btn btn-primary" style="float:right;">Save</button>
+					</form>
+					<div style="width: 40%;
+		margin-left: 44%;margin-top:60px;
+		margin-right: 55%" ; position:absolute;><button class="btn btn-primary" type="button" onclick="location.href='/plans/<%=plan.id %>/createactivity';">Create Activity</button></div>
+				</div>
+				<% }%>
+					<%if (planOwner.local.username!=user.local.username){%>
+						<div id="form">
+							<div class="row" style="width:1000px;">
+								<div class="col-sm-4"><label>Plan Name:</label></div>
+								<div class="col-sm-4"><label><%=plan.planName%></label></div><br><br>
+							</div>
+							<div class="row" style="width:1000px;">
+								<div class="col-sm-4"><label>Plan Creater:</label></div>
+								<div class="col-sm-4"><label><%= planOwner.local.username %></label></div><br><br>
+							</div>
+							<div class="row" style="width:1000px;">
+								<div class="col-sm-4"><label>Plan Create Time:</label></div>
+								<div class="col-sm-4"><label><%= moment(plan.planTime).format('MMMM Do YYYY, h:mm:ss a') %></label></div><br><br>
+							</div>
+							<div class="row" style="width:1000px;">
+								<div class="col-sm-4"><label>Plan Update Time:</label></div>
+								<div class="col-sm-4"><label><%= moment(plan.updateTime).format('MMMM Do YYYY, h:mm:ss a') %></label></div><br><br>
+							</div>
+							<div class="row" style="width:1000px;">
+								<label class="col-sm-4">Share Status:</label>
+								<div class="col-sm-4">
+									<%if (plan.private==true){%>
+										<label class="tgl" style="font-size:15px">
+									<input type="checkbox" id="private " name="private " checked disabled>
+										<span data-on="Private" data-off="Public"></span>
+									</label>
+										<%} %>
+											<%if (plan.private==false){%>
+												<label class="tgl" style="font-size:15px">
+											<input type="checkbox" id="private " name="private " disabled>
+												<span data-on="Private" data-off="Public"></span>
+											</label>
+												<%} %>
+								</div>
+							</div>
+						</div>
+		<% }%>
+
+			<div class="wrapper">
+				<%if (activity.length!=0){%>
+					<div class="timeline"></div>
+					<%}%>
+						<div class="momentscontainer">
+							<input id="act_index" type="hidden" value="<%=activity.length%>">
+							<% activity.forEach(function(detail,index){%>
+								<% if(index%2==0){%>
+									<div class="moment right">
+										<%}%>
+											<% if(index%2!=0){%>
+												<div class="moment left">
+													<%}%>
+														<div class="date">
+															<h4 style="color:black;"><%= moment(detail.activityTime).format('Do MMMM YYYY') %></h4>
+														</div>
+														<div class="row">
+															<div class="col-sm-9">
+																<h1><%= detail.activitySub %></h1>
+															</div>
+															<div class="col-sm-3">
+																<% if(detail.ratingTotal==0){ %>
+																	<h4>Rating: 0</h4>
+																	<% } else{ %>
+																		<h4>Rating: <%=parseFloat(detail.publicRating/detail.ratingTotal).toFixed(2)%></h4>
+																		<% } %>
+															</div>
+														</div>
+														<p>
+															<textarea disabled rows="2" cols="50" style="border:none;background-color:transparent;resize:none;"><%= detail.activityContent %></textarea>
+														</p>
+														<p>Location :
+															<%= detail.activityLoc %>
+														</p>
+														<input id="loc-input<%= activity.indexOf(detail) %>" type="hidden" value="<%= detail.activityLoc %>"></input>
+														<div id="map<%= activity.indexOf(detail)%>" style="height: 200px; width: 80%; "></div>
+														<br><p>Cost :
+															<%= detail.activityCost %>
+														</p>
+														<p>Category :
+															<%= detail.activityCat %>
+														</p>
+														<p>Rating :
+
+															<%= detail.userRating %>
+														</p>
+														<p>Images :</p>
+														<% images.forEach(function(image) { %>
+															<% if (image.activityID.equals(detail.id)) { %>
+																<img class="fancybox" style="width:100px;height:100px;" src="\images\activity\<%=image.imageName %>">
+																<% } %>
+																	<% }); %>
+																		<!--dropzone photo upload-->
+																		<%if (planOwner.local.username==user.local.username){%>
+																			<form action="/plans/<%= plan.id %>/uploadActivityImg" class="dropzone">
+																				<input type="hidden" name="activityID" value="<%= detail.id %>">
+																				<div class="fallback">
+																					<input name="file" type="file">
+																				</div>
+																			</form>
+																			<%}%>
+																				<!-- End dropzone if -->
+																				<br>
+																				<a id="<%= detail.id %>"></a>
+																				<h3>Comment & rate</h3>
+																				<div class="input-group">
+																					<form name="addcomment" action="/plans/<%=plan.id %>/comment" method="post">
+																						<div class="stars">
+																							<input class="star star-5" id="star-5<%= detail.id %>" type="radio" name="star" value=5>
+																							<label class="star star-5" for="star-5<%= detail.id %>"></label>
+																							<input class="star star-4" id="star-4<%= detail.id %>" type="radio" name="star" value=4>
+																							<label class="star star-4" for="star-4<%= detail.id %>"></label>
+																							<input class="star star-3" id="star-3<%= detail.id %>" type="radio" name="star" value=3>
+																							<label class="star star-3" for="star-3<%= detail.id %>"></label>
+																							<input class="star star-2" id="star-2<%= detail.id %>" type="radio" name="star" value=2>
+																							<label class="star star-2" for="star-2<%= detail.id %>"></label>
+																							<input class="star star-1" id="star-1<%= detail.id %>" type="radio" name="star" value=1>
+																							<label class="star star-1" for="star-1<%= detail.id %>"></label>
+																						</div>
+																						<textarea onkeyup="auto_grow(this)"rows="4" cols="45" id="comments" name="comments" style="background: transparent;" placeholder="Write your comment here..."></textarea>
+																						<input type="hidden" name="activityID" value="<%= detail.id %>">
+																						<input type="submit" class="btn btn-primary" value="Comment"></input>
+																					</form>
+																				</div>
+																				<hr data-brackets-id="12673">
+																				<ul data-brackets-id="12674" class="list-unstyled ui-sortable" style="margin-bottom: -16px;">
+																					<% var counter = 0 %>
+																		<% var showFirstFive = 5 %>
+																		<% comments.forEach(function(comment) { %>
+																			<% if (comment.activityID.equals(detail.id)) { %>
+																				<% if (counter < showFirstFive){ %>
+																				<li class="pull-left primary-font"style="color:black;"><%=comment.userID.local.username%></li>
+																				<li class="pull-right text-muted" style="color:black;"><span class="glyphicon glyphicon-time"></span><%= moment(comment.date,"YYYYMMDD").fromNow(); %></li>
+																			<br>
+																				<li class="ui-state-default" style="color:black;">
+																					<%= comment.comments %>
+																				</li>
+																				<br>
+																				<% } %>
+																				<% counter = counter + 1 %>
+																				<% } %>
+																					<%})%>
+																	</ul>
+																	<ul style="display:none" data-brackets-id="12675" id="sortable_showMore<%= activity.indexOf(detail) %>" class="list-unstyled ui-sortable">
+																		<% counter = 0 %>
+																		<% comments.forEach(function(comment) { %>
+																			<% if (comment.activityID.equals(detail.id)) { %>
+																				<% if (counter >= showFirstFive){ %>
+																				<li class="pull-left primary-font" style="color:black;"><%=comment.userID.local.username%></li>
+																				<li class="pull-right text-muted" style="color:black;"><span class="glyphicon glyphicon-time"></span><%= moment(comment.date,"YYYYMMDD").fromNow(); %></li>
+																				<br>
+																				<li class="ui-state-default" style="color:black;">
+																					<%= comment.comments %>
+																				</li>
+																				<br>
+																				<% } %>
+																				<% counter = counter + 1 %>
+																				<% } %>
+																					<%})%>
+																	</ul>
+																	<% if (counter > 5) { %>
+																	<a id="moreLess<%= activity.indexOf(detail) %>" onclick="myFunction<%= activity.indexOf(detail) %>()">Show More Comment</a><br><br>
+																	<% } %>
+																	<script>
+																	function myFunction<%= activity.indexOf(detail) %>() {
+																			var more = document.getElementById("sortable_showMore<%= activity.indexOf(detail) %>");
+																			var moreLess = document.getElementById("moreLess<%= activity.indexOf(detail) %>");
+																			if (more.style.display === 'none') {
+																	        more.style.display = 'block';
+																					moreLess.innerHTML = "Show Less Comment";
+																	    } else {
+																					more.style.display = 'none';
+																					moreLess.innerHTML = "Show More Comment";
+																	    }
+																	}
+																	</script>
+																				</ul>
+																				<%if (planOwner.local.username==user.local.username){%>
+																					<button type="button" class="btn btn-primary" onclick="location.href='/plans/<%= plan.id %>/updateActivity/<%= detail.id %>';">Update</button>
+																					<a href="/plans/<%= plan.id %>/delActivity/<%= detail.id %>" onclick="return confirm('Are you sure you want to Remove the activity?');" class="btn btn-default" role="button" method="delete">Delete</a>
+																					<%}%>
+												</div>
+												<!-- End class:moment right/moment left-->
+												<%})%>
+													<!--End activity loop -->
+									</div>
+
+						</div>
+			<%- include ../partials/closeBody.ejs %>
+</body>
+
+</html>
+<!-- === END FOOTER === -->

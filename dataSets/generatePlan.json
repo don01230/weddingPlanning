@@ -1,0 +1,20 @@
+[
+  '{{repeat(10000)}}',
+  {
+    _id: 'ObjectId('+'{{objectId()}}'+')',
+    ratingTotal: '{{integer(1, 5)}}',
+    publicRating: function(tags){
+      					return this.ratingTotal*tags.integer(1, 5);
+    			  },
+    activityCost: '{{integer(99, 99999999)}}',
+    activityLoc: '{{city()}}, {{state()}}',
+    activityTime: '{{date(new Date(2000,0,1),new Date(),"YYYY-MM-dd")}}',
+    activityContent: '{{lorem(1, "sentences")}}',
+    activitySub: '{{lorem(1, "words")}}',
+    planID: 'ObjectID',
+    updateTume: '{{date(new Date(2000,0,1),new Date(),"YYYY-MM-dd")}}',
+    userRating: '{{integer(1, 5)}}',
+    __v : 0
+  }
+
+]

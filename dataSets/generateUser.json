@@ -1,0 +1,16 @@
+[
+  '{{repeat(100)}}',
+  {
+    _id: 'ObjectId(' + '{{objectId()}}' + ')',
+    local : {
+    	username: '{{firstName()}} {{surname()}}',
+    	email: '{{email(1)}}',
+    	password: '{{lorem(1, "words")}}',
+    	gender: '{{gender()}}',
+    	dob: '{{date(new Date(1970, 0, 1),new Date(1998,0,1),"YYYY-MM-dd")}}',
+    	status: '{{random("single","married","business")}}',
+    	image: 'profilePicture.png'
+    },
+    __v : 0
+  }
+]

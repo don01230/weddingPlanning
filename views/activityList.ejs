@@ -1,0 +1,435 @@
+<!-- views/signup.ejs -->
+<!doctype html>
+<html lang="en">
+<head>
+  <% include ../partials/header %>
+  <!-- Include Required Prerequisites -->
+  <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css"> <!-- load bootstrap css -->
+  <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css"> <!-- load fontawesome -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+  <script type="text/javascript" src="//cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+  <!-- Bootstrap Multi-Select Plugin -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.2/css/bootstrap-select.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.2/js/bootstrap-select.min.js"></script>
+  <!-- Include Date Range Picker -->
+  <script type="text/javascript" src="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.js"></script>
+  <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.css" />
+  <style>
+    #dateRangeSelector {
+        position: relative;
+    }
+    #dateRangeSelector .fa-calendar {
+        color: #666;
+        top: 2px;
+        left: 5px;
+        position: absolute;
+    }
+    #demo {
+        padding-left: 20px;
+    }
+    .input-group-addon {
+      background-color: #FFE4E1;
+    }
+    .btn-love{
+      background-color: #FFE4E1;
+      border-color: #ccc;
+    }
+
+    div.table-title {
+      display: block;
+      margin: auto;
+      max-width: 600px;
+      padding:5px;
+      width: 100%;
+    }
+    .table-fill {
+      background: white;
+      border-radius:3px;
+      border-collapse: collapse;
+      height: 320px;
+      margin: auto;
+      max-width: 600px;
+      padding:5px;
+      width: 100%;
+      box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+      animation: float 5s infinite;
+    }
+    th {
+      color:#666B85;;
+      background:#FFE4E1;
+      border-bottom:4px solid #9ea7af;
+      border-right: 1px solid #9ea7af;
+      font-size: 18px;
+      font-weight: 100;
+      padding:5px 24px;
+      text-align:center;
+      vertical-align:middle;
+    }
+    th:first-child { border-top-left-radius:3px; }
+    th:last-child {
+      border-top-right-radius:3px;
+      border-right:none;
+    }
+    tr {
+      border-top: 1px solid #C1C3D1;
+      border-bottom-: 1px solid #C1C3D1;
+      color:#666B85;
+      font-size:14px;
+      font-weight:normal;
+      text-shadow: 0 1px 1px rgba(256, 256, 256, 0.1);
+    }
+    tr:first-child { border-top:none; }
+    tr:last-child { border-bottom:none; }
+    tr:last-child td:first-child { border-bottom-left-radius:3px; }
+    tr:last-child td:last-child { border-bottom-right-radius:3px; }
+    td {
+      background:#FFFFFF;
+      padding: 5px 20px;
+      text-align: center;
+      vertical-align:middle;
+      font-weight:300;
+      font-size:14px;
+      border-right: 1px solid #C1C3D1;
+    }
+    td:last-child { border-right: 0px; }
+    th.text-left { text-align: left; }
+    th.text-center { text-align: center; }
+    th.text-right { text-align: right; }
+    td.text-left { text-align: left; }
+    td.text-center { text-align: center; }
+    td.text-right { text-align: right; }
+
+    .input-group-addon {
+      background-color: #FFE4E1;
+    }
+    .btn-love{
+      background-color: #FFE4E1;
+      border-color: #ccc;
+    }
+    @media
+    only screen and (max-width: 760px){
+    	table, thead, tbody, th, td, tr {
+    		display: block;
+    	}
+    	thead tr {
+    		position: absolute;
+    		top: -9999px;
+    		left: -9999px;
+    	}
+    	tr { border: 1px solid #ccc; }
+    	td {
+    		/* Behave  like a "row" */
+    		border: none;
+    		border-bottom: 1px solid #eee;
+    		position: relative;
+    		padding-left: 50%;
+    	}
+    	td:before {
+    		/* Now like a table header */
+    		position: absolute;
+    		/* Top/left values mimic padding */
+    		top: 6px;
+    		left: 6px;
+    		width: 45%;
+    		padding-right: 10px;
+    		white-space: nowrap;
+    	}
+      table td:before {
+        content: attr(data-label);
+      }
+    }
+  </style>
+</head>
+<body>
+<% include ../partials/openBody.ejs %>
+<div class="container" style="padding-bottom: 30px;"><div class="margin-vert-30"><div class="col-md-10 col-md-offset-1 signup-page">
+	<h1><span class="fa fa-pencil-square-o"></span>Activity List</h1>
+  <form method="post" id="toSearch" class="form-inline col-md-12">
+    <!-- 2 search bars, the 2nd one is hidden by defualt -->
+    <!-- user can click the drop-down button on the 1st bar to use the 2nd one -->
+    <!-- the 2nd one shows more fields for searching -->
+    <div class="row" id="nsBar" style="margin-bottom: 5px;">
+      <div class="col-md-5">
+        <input type="text" class="form-control" name="name" id="name" placeholder="Serach name...." style="width: 100%"/>
+      </div>
+      <div class="col-md-5">
+        <input type="hidden" name="category" value="All" id="category">
+          <select class="selectpicker" data-width="100%" title="All category selected" id="selectCategory" multiple data-live-search="true" dropupAuto="false">
+            <option value="WeddingPlace">Wedding Place</option>
+            <option value="Decoration">Decoration</option>
+          </select>
+      </div>
+      <div class="col-md-2" id="largeScreenSubmit" style="display: initial;">
+        <div class="input-group-btn">
+          <button class="btn btn-love" style="border-radius: 4px" onClick="OnSubmit(1)">Search</button>
+          <button type="button" class="btn btn-love" style="border-radius: 0px 4px 4px 0px" onClick="renderAdvanceSearch()"><span class="aSArrow glyphicon glyphicon-chevron-down" /></button>
+        </div>
+      </div>
+    </div>
+    <div class="row" id="asBar" style="display: none">
+      <div class="col-md-4">
+        <input name="start" id="start" type="hidden" value="">
+        <input name="end" id="end" type="hidden" value="">
+        <label id="dateRangeSelector" style="width: 100%;">
+          <i class="fa fa-calendar fa-lg" style="padding-top: 6px; padding-left: 3px;"></i>
+          <input type="text" id="demo" class="form-control" value="" placeholder="Search time..." style="padding-left: 30px; width: 100%"/>
+        </label>
+      </div>
+      <div class="col-md-4">
+        <span class="input-group">
+          <input type="number" class="form-control" id="lowCost" name="lowCost" onchange="checkCost()" placeholder="&#36;" min=0 pattern="\d*"/>
+          <span class="input-group-addon"> - </span>
+          <input type="number" class="form-control" id="highCost" name="highCost" onchange="checkCost()" placeholder="&#36;" min=0 pattern="\d*"/>
+        </span>
+      </div>
+      <div class="col-md-4">
+        <input type="hidden" name="sortBy" value="suggested" id="sortBy">
+        <input type="hidden" name="sortOrder" value="default" id="sortOrder">
+        <select class="selectpicker" multiple title="Default ordering" id="selectSort">
+          <optgroup label="Order by" data-max-options="1">
+            <option value="updateTime">Date</option>
+            <option value="activityCost">Cost</option>
+            <option value="userRating">Rating</option>
+          </optgroup>
+          <optgroup label="Order" data-max-options="1">
+            <option value="default">Default</option>
+            <option value="reverse">Reverse</option>
+          </optgroup>
+        </select>
+
+      </div>
+    </div>
+    <div class="input-group col-md-4" id="smallScreenSubmit" style="display: none;">
+      <div class="input-group-btn">
+        <button class="btn btn-love" style="border-radius: 4px" onClick="OnSubmit(1)">Search</button>
+        <button type="button" class="btn btn-love" style="border-radius: 0px 4px 4px 0px" onClick="renderAdvanceSearch()"><span class="aSArrow glyphicon glyphicon-chevron-down" /></button>
+      </div>
+    </div>
+    <hr>
+    <!-- this is atable showing relevant data -->
+    <table style="width: 100%;">
+      <thead>
+        <th>Activity Name</th>
+        <th>Plan Name</th>
+        <th>Category</th>
+        <th>Cost</th>
+        <th>User Name</th>
+        <th>Update Time</th>
+        <th>Rating</th>
+      </thead>
+      <% for (var j = 0; j < listOfAct.length; j++) {%>
+        <tr>
+          <td data-label="Activity Name"><%= listOfAct[j].activitySub %></td>
+          <td data-lebel="Plan Name"><a href="http://localhost:3000/plans/<%= listOfAct[j].planID._id %>"><%= listOfAct[j].planID.planName %></a></td>
+          <td data-label="Category"><%= listOfAct[j].activityCat %></td>
+          <td data-label="Cost"><%= listOfAct[j].activityCost %></td>
+          <td data-label="User Name"><%= listOfAct[j].planID.userID.local.username %></td>
+          <td data-label="Update Time" class="tempUpdateTime"><%= listOfAct[j].updateTime %></td>
+          <td data-label="Rating"><%= listOfAct[j].userRating %></td>
+        </tr>
+        <% } %>
+    </table>
+    <!-- this is the pagination -->
+    <input type="hidden" name="currentPage" id="currentPage" value=<%= currentPage %> />
+    <input type="hidden" name="nextPage" id="nextPage" value=<%= currentPage %> />
+    <% var leadingPage = Math.max(1, (parseInt(currentPage) - 1)) %>
+    <% var trailingPage = Math.min(maxP, parseInt(currentPage) + 1) %>
+    <div style="text-align: center;"><nav aria-label="Page navigation example" style="">
+      <ul class="pagination">
+        <li class="page-item">
+          <a class="page-link" href="#" aria-label="Previous" onclick="sayHello('<%= leadingPage %>')">
+            <span aria-hidden="true">&laquo;</span>
+            <span class="sr-only">Previous</span>
+          </a>
+        </li>
+        <!-- pagination buttons for the n-2 to n+2 page showed -->
+        <% for(var i = minP; i <= Math.min(maxP, parseInt(currentPage) + 2); i++){ %>
+          <li class="page-item <% if (i == currentPage ) { %> active <% } %>">
+            <a class="page-link" href="#" onclick="sayHello('<%= i %>')"><%= i %></a>
+          </li>
+        <% } %>
+        <li class="page-item">
+          <a class="page-link" href="#" aria-label="Next" onclick="sayHello('<%= trailingPage %>')">
+            <span aria-hidden="true">&raquo;</span>
+            <span class="sr-only">Next</span>
+          </a>
+        </li>
+      </ul>
+    </nav></div>
+  </form>
+</div></div>
+<% include ../partials/closeBody.ejs %>
+</body>
+<script>
+  var monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+  $(document).ready(function(){
+    // make updateTime in dd-MMM-YYYY format
+    $( "td.tempUpdateTime" ).each(function( index ) {
+      var tempDate = new Date($(this).text());
+      var mm = tempDate.getMonth();
+      var dd = tempDate.getDate();
+      dd > 9 ? dd = dd : dd = '0' + dd;
+      var yyyy = tempDate.getFullYear();
+      $(this).text(dd + "-" + monthNames[mm] + "-" + yyyy);
+    });
+    fillFormAccordingToSearchSettingHash();
+    // initialize datepicker
+    var start = moment().subtract(29, 'days');
+    var end = moment();
+    $('#demo').daterangepicker({
+      "ranges": {
+         'Today': [moment(), moment()],
+         'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+         'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+         'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+         'This Month': [moment().startOf('month'), moment().endOf('month')],
+         'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+      },
+      "alwaysShowCalendars": true,
+      "startDate": start,
+      "endDate": end,
+      "autoUpdateInput": false,
+      "locale": { cancelLabel: 'Clear' }
+    }, function(start, end, label) {
+      console.log("New date range selected: ' + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD') + ' (predefined range: ' + label + ')");
+    });
+
+    $('#myForm').on('submit', function(){
+      if ($("#start").val() == "")
+        $("#start").val('1970-01-01');
+      if ($("#end").val() == "")
+        $("#end").val('2099-12-31');
+    });
+  });
+
+  // when a date is selected, the correspongdig hidden input will also be updated
+  $('#demo').on('apply.daterangepicker', function(ev, picker) {
+    $(this).val(picker.startDate.format('DD-MM-YYYY') + ' - ' + picker.endDate.format('DD-MM-YYYY'));
+    $("#start").val(picker.startDate.format('YYYY-MM-DD'));
+    $("#end").val(picker.endDate.format('YYYY-MM-DD'));
+  });
+  $('#demo').on('cancel.daterangepicker', function(ev, picker) {
+    $(this).val('');
+    $("#start").val('1970-01-01');
+    $("#end").val('2099-12-31');
+  });
+
+  // the searth bars are slightly different for laptop and phone size display
+  window.onresize = function(){
+    rerenderSearchBar();
+  }
+  function rerenderSearchBar(){
+    if ($(document).width() < 1000){
+      $("#largeScreenSubmit").css("display", "none");
+      $("#smallScreenSubmit").css("display", "initial");
+    }
+    else{
+      $("#smallScreenSubmit").css("display", "none");
+      $("#largeScreenSubmit").css("display", "initial");
+    }
+  }
+
+  function renderAdvanceSearch(){
+    rerenderSearchBar();
+    if ($("#asBar").css("display") == "none"){
+      $("#asBar").show(500);
+      $(".aSArrow").removeClass("glyphicon-chevron-down");
+      $(".aSArrow").addClass("glyphicon-chevron-up");
+    }
+    else{
+      $("#asBar").hide(500);
+      $(".aSArrow").removeClass("glyphicon-chevron-up");
+      $(".aSArrow").addClass("glyphicon-chevron-down");
+    }
+  }
+
+  // if no category is selected, all category will be searched
+  // else, only the selected category will be searched
+  $('#selectCategory').on('changed.bs.select', function (e) {
+    if ($('#selectCategory').val().length == 0)
+      $('#category').val("All");
+    else
+      $('#category').val($('#selectCategory').val());
+  });
+
+  $('#selectSort').on('changed.bs.select', function (e) {
+    // disallow invalid value
+    console.log($('#selectSort').val());
+    if ($('#selectSort').val().length == 1 ){
+      var value = $("#selectSort").val()[0];
+      console.log(value);
+      if (value == "default" || value == "reverse"){
+        console.log("Only order selected");
+        $('#selectSort').selectpicker('val', ["updateTime", value]);
+      }
+      else
+        $('#selectSort').selectpicker('val', [value, "default"]);
+    }
+    $("#sortBy").val($("#selectSort").val()[0]);
+    $("#sortOrder").val($("#selectSort").val()[1]);
+  });
+
+  // the cost will be swap if lowCost > highCost
+  function checkCost(){
+    if (($("#lowCost").val() != "") && ($("#highCost").val() != "")){
+      if ($("#lowCost").val() > $("#highCost").val() || $("#highCost").val() < $("#highCost").val()){
+        var temp = $("#highCost").val(); //exchange the range
+        $("#highCost").val($("#lowCost").val());
+        $("#lowCost").val(temp);
+      }
+    }
+  }
+
+// this is a function that fills the search bar according to the search criteria
+// so that the user will not forget what he/she is searching for
+// the bar will only be filled when the search criteria are not the defaults
+  function fillFormAccordingToSearchSettingHash(){
+    if ("<%= searchSettingHash['name'] %>" != "")
+      $("#name").val("<%= searchSettingHash['name'] %>");
+    var catArray;
+    if (<%= searchSettingHash['category'].length %> != 4){ //all selected
+      catArray = "<%= searchSettingHash['category'] %>".split(",");
+    }
+    $('#selectCategory').selectpicker('val', catArray);
+    $("#start").val("<%= searchSettingHash['inputStart'] %>");
+    $("#end").val("<%= searchSettingHash['inputEnd'] %>");
+    if (($("#start").val() != "1970-01-01") || ($("#end").val() != "2099-12-31")){
+      $("#demo").val("<%= searchSettingHash['displayStart'] %> - <%= searchSettingHash['displayEnd'] %>");
+    }
+    if (<%= searchSettingHash["lowCost"] %> != 0)
+      $("#lowCost").val(<%= searchSettingHash['lowCost'] %>);
+    if (<%= searchSettingHash['highCost'] %> != 99999999)
+      $("#highCost").val(<%= searchSettingHash['highCost'] %>);
+    // not default sorting
+    var sortArray = [];
+    $("#sortBy").val("<%= searchSettingHash['sortBy'] %>");
+    $("#sortOrder").val("<%= searchSettingHash['sortOrder'] %>");
+    sortArray.push("<%= searchSettingHash['sortBy'] %>");
+    sortArray.push("<%= searchSettingHash['sortOrder'] %>");
+    if ((sortArray[1] != 'suggested') || (sortArray[1] != 'default'))
+      $('#selectSort').selectpicker('val', sortArray);
+  }
+
+  // fields are checked and filled accordingly before submitting the form
+  function OnSubmit(pageNumber){
+    $("#nextPage").val(0);
+    if ($("#start").val() == "")
+      $("#start").val('1970-01-01');
+    if ($("#end").val() == "")
+      $("#end").val('2099-12-31');
+    $("#nextPage").val(pageNumber);
+    $("#toSearch").submit();
+  };
+
+  // this function servers the same purpose as OnSubmit()
+  // it is just that I forgot to change its name to amore meaningful one
+  function sayHello(pageNumber){
+    $("#nextPage").val(pageNumber);
+    // clear all search criteria
+    $("#name").val('<%= searchSettingHash["name"] %>');
+    $("#start").val('<%= searchSettingHash["inputStart"] %>');
+    $("#end").val('<%= searchSettingHash["inputEnd"] %>');
+    $("#toSearch").submit();
+  }
+</script>
+</html>

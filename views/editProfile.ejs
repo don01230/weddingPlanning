@@ -1,0 +1,149 @@
+<!-- === BEGIN HEADER === -->
+<!DOCTYPE html>
+<!--[if IE 8]> <html lang="en" class="ie8"> <![endif]-->
+<!--[if IE 9]> <html lang="en" class="ie9"> <![endif]-->
+<!--[if !IE]><!-->
+<html lang="en">
+    <!--<![endif]-->
+    <head>
+        <% include ../partials/header %>
+        <script>
+      	function validateForm(){
+      		var password=document.forms["profileForm"]["password"].value;
+      		var username=document.forms["profileForm"]["username"].value;
+      		var gender=document.forms["profileForm"]["gender"].value;
+      		var dob=document.forms["profileForm"]["dob"].value;
+      		var status=document.forms["profileForm"]["status"].value;
+
+      		if(password==null || password=="" || username==null || username=="" || gender==null || gender=="" || dob==null || dob=="" || status==null || status==""){
+      			alert("please fill all required field");
+      			return false;
+      		}
+      	}
+      	</script>
+    </head>
+    <body>
+        <% include ../partials/openBody %>
+                    <div class="container">
+                        <!-- === END HEADER === -->
+                        <!-- === BEGIN CONTENT === -->
+                        <div class="row margin-vert-30">
+                            <!-- Register Box -->
+                            <div class="col-md-6 col-md-offset-3 col-sm-offset-3">
+                              <% if (message.length > 0) { %>
+                            		<div class="alert alert-danger"><%= message %></div>
+                            	<% } %>
+                                <form class="signup-page" action="/editProfile" method="post" name="profileForm" onsubmit="return validateForm()">
+                                    <div class="signup-header">
+                                        <h2>Edit My Profile</h2>
+                                    </div>
+                                    <div align="center">
+                                      <img src="/images/<%=user.local.image%>" style="" class="img-responsive  margin-bottom-20">
+                                    </div>
+                                    <div align="">
+                                      <button type="button" class="btn btn-primary form-control margin-bottom-20" onclick="location.href='/upload';">Upload Picture</button>
+                                    </div>
+                                    <div><strong>Email Address</strong>
+                                    </div>
+                                    <div class="margin-bottom-20"><%= user.local.email %>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-sm-6">
+                                            <label>Password
+                                                <span class="color-red">*</span>
+                                            </label>
+                                            <input class="form-control margin-bottom-20" type="password" name="password">
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <label>Confirm Password
+                                                <span class="color-red">*</span>
+                                            </label>
+                                            <input class="form-control margin-bottom-20" type="password">
+                                        </div>
+                                    </div>
+																		<label>User Name</label>
+                                    <input class="form-control margin-bottom-20" type="text" name="username" value=<%= user.local.username%>>
+                                    <div class="">
+                                      <label>Gender</label>
+                                    </div>
+																		<div class="row">
+                                      <% if (user.local.gender=='M'){ %>
+																			<div class="col-sm-6">
+                                    		<input class="form-inline margin-bottom-20" type="radio" name="gender" value="M" checked> Male
+																			</div>
+																			<div class="col-sm-6">
+																				<label></label>
+																				<input class="form-inline margin-bottom-20" type="radio" name="gender" value="F"> Female
+																			</div>
+                                      <% }else{ %>
+                                        <div class="col-sm-6">
+                                      		<input class="form-inline margin-bottom-20" type="radio" name="gender" value="M"> Male
+  																			</div>
+  																			<div class="col-sm-6">
+  																				<label></label>
+  																				<input class="form-inline margin-bottom-20" type="radio" name="gender" value="F" checked> Female
+  																			</div>
+                                      <% } %>
+																		</div>
+																		<br>
+																		<label>Date Of Birth</label>
+                                    <input class="form-control margin-bottom-20" type="date" name="dob" value="<%= user.local.dob.toISOString().substring(0,10) %>">
+                                    <div class="">
+                                      <label>Status</label>
+                                    </div>
+																		<div class="row">
+                                      <% if (user.local.status=='single'){ %>
+																			<div class="col-sm-4">
+																				<input class="form-inline margin-bottom-20" type="radio" name="status" value="single" checked> Single
+																			</div>
+																			<div class="col-sm-4">
+																				<label></label>
+																				<input class="form-inline margin-bottom-20" type="radio" name="status" value="married"> Married
+																			</div>
+																			<div class="col-sm-4">
+																				<label></label>
+																				<input class="form-inline margin-bottom-20" type="radio" name="status" value="business"> Business
+																			</div>
+                                      <% }else if (user.local.status=='married'){ %>
+                                      <div class="col-sm-4">
+  																			<input class="form-inline margin-bottom-20" type="radio" name="status" value="single" checked> Single
+  																		</div>
+  																		<div class="col-sm-4">
+  																			<label></label>
+  																			<input class="form-inline margin-bottom-20" type="radio" name="status" value="married"> Married
+  																		</div>
+  																		<div class="col-sm-4">
+  																			<label></label>
+  																			<input class="form-inline margin-bottom-20" type="radio" name="status" value="business"> Business
+  																		</div>
+                                      <% }else{ %>
+                                      <div class="col-sm-4">
+                                        <input class="form-inline margin-bottom-20" type="radio" name="status" value="single" checked> Single
+                                      </div>
+                                      <div class="col-sm-4">
+                                        <label></label>
+                                        <input class="form-inline margin-bottom-20" type="radio" name="status" value="married"> Married
+                                      </div>
+                                      <div class="col-sm-4">
+                                        <label></label>
+                                        <input class="form-inline margin-bottom-20" type="radio" name="status" value="business"> Business
+                                      </div>
+                                      <% } %>
+																		</div>
+                                    <hr>
+                                    <div class="row">
+                                        <div class="col-lg-6" >
+                                            <button class="btn btn-primary" type="submit">Save</button>
+                                            <button class="btn btn-primary" type="button" onclick="location.href='/viewMyProfile';">Cancel</button>
+                                        </div>
+
+                                    </div>
+                                </form>
+                            </div>
+                            <!-- End Register Box -->
+                        </div>
+                        <% include ../partials/closeBody %>
+    </body>
+</html>
+<!-- === END FOOTER === -->

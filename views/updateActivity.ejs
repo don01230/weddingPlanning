@@ -1,0 +1,270 @@
+<!-- === BEGIN HEADER === -->
+<!DOCTYPE html>
+<!--[if IE 8]> <html lang="en" class="ie8"> <![endif]-->
+<!--[if IE 9]> <html lang="en" class="ie9"> <![endif]-->
+<!--[if !IE]><!-->
+<html lang="en">
+<!--<![endif]-->
+
+<head>
+    <%- include ../partials/header.ejs %>
+        <meta charset="utf-8">
+        <link rel="stylesheet" type="text/css" href="/stylesheets/star.css" />
+        <style>
+            #map {
+                height: 300px;
+                width: 100%;
+            }
+
+            .controls {
+                margin-top: 10px;
+                border: 1px solid transparent;
+                border-radius: 2px 0 0 2px;
+                box-sizing: border-box;
+                -moz-box-sizing: border-box;
+                height: 32px;
+                outline: none;
+                box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+            }
+
+            #pac-input {
+                background-color: #fff;
+                font-family: Roboto;
+                font-size: 10px;
+                font-weight: 300;
+                margin-left: 12px;
+                padding: 0 11px 0 13px;
+                text-overflow: ellipsis;
+                width: 200px;
+            }
+
+            #pac-input:focus {
+                border-color: #4d90fe;
+            }
+
+            .pac-container {
+                font-family: Roboto;
+            }
+
+            #type-selector {
+                color: #fff;
+                background-color: #4d90fe;
+                padding: 5px 11px 0px 11px;
+            }
+
+            #type-selector label {
+                font-family: Roboto;
+                font-size: 13px;
+                font-weight: 300;
+            }
+
+            #target {
+                width: 345px;
+            }
+        </style>
+
+        <script>
+            // This example adds a search box to a map, using the Google Place Autocomplete
+            // feature. People can enter geographical searches. The search box will return a
+            // pick list containing a mix of places and predicted search terms.
+            function initAutocomplete() {
+                var map = new google.maps.Map(document.getElementById('map'), {
+                    center: {
+                        lat: 22.25,
+                        lng: 114.1667
+                    },
+                    zoom: 15,
+                    mapTypeId: google.maps.MapTypeId.ROADMAP
+                });
+
+                // Create the search box and link it to the UI element.
+                var input = document.getElementById('pac-input');
+                var searchBox = new google.maps.places.SearchBox(input);
+                map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
+
+                // Bias the SearchBox results towards current map's viewport.
+                map.addListener('bounds_changed', function() {
+                    searchBox.setBounds(map.getBounds());
+                });
+
+                var markers = [];
+                // [START region_getplaces]
+                // Listen for the event fired when the user selects a prediction and retrieve
+                // more details for that place.
+                searchBox.addListener('places_changed', function() {
+                    var places = searchBox.getPlaces();
+
+                    if (places.length == 0) {
+                        return;
+                    }
+
+                    // Clear out the old markers.
+                    markers.forEach(function(marker) {
+                        marker.setMap(null);
+                    });
+                    markers = [];
+
+                    // For each place, get the icon, name and location.
+                    var bounds = new google.maps.LatLngBounds();
+                    places.forEach(function(place) {
+                        var icon = {
+                            url: place.icon,
+                            size: new google.maps.Size(71, 71),
+                            origin: new google.maps.Point(0, 0),
+                            anchor: new google.maps.Point(17, 34),
+                            scaledSize: new google.maps.Size(25, 25)
+                        };
+
+                        // Create a marker for each place.
+                        markers.push(new google.maps.Marker({
+                            map: map,
+                            icon: icon,
+                            title: place.name,
+                            position: place.geometry.location
+                        }));
+
+                        if (place.geometry.viewport) {
+                            // Only geocodes have viewport.
+                            bounds.union(place.geometry.viewport);
+                        } else {
+                            bounds.extend(place.geometry.location);
+                        }
+                    });
+                    map.fitBounds(bounds);
+                });
+                // [END region_getplaces]
+            }
+        </script>
+
+        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAsc5-pXyNy6vcLP5wumGcT8eB6l2muZ8o&libraries=places&callback=initAutocomplete" async defer></script>
+</head>
+
+<body>
+    <%- include ../partials/openBody.ejs %>
+        <div class="container">
+            <!-- === BEGIN CONTENT === -->
+            <div class="row margin-vert-30">
+                <!-- Register Box -->
+                <div class="col-md-6 col-md-offset-3 col-sm-offset-3">
+                    <% if (message.length > 0) { %>
+                        <div class="alert alert-danger">
+                            <%= message %>
+                        </div>
+                        <% } %>
+                            <form class="signup-page" action="/plans/<%=planid%>/updateActivity/<%= activity.id %>" method="post">
+                                <div class="signup-header">
+                                    <h2>Update Activity</h2>
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Subject</label>
+                                    <input type="text" class="form-control" name="activitySub" value="<%= activity.activitySub %>">
+                                </div>
+                                <div class="form-group">
+                                    <label>Content</label>
+                                    <textarea rows="4" cols="40" class="form-control" name="activityContent" style="background: transparent;"><%= activity.activityContent %></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label>Date</label>
+                                    <input type="text" class="form-control" name="activityTime" value="<%= activity.activityTime %>">
+                                </div>
+                                <div class="form-group">
+                                    <label>Location</label>
+                                    <input id="pac-input" class="controls" type="text" value="<%= activity.activityLoc %>" name="activityLoc">
+                                </div>
+                                <div id="map"></div>
+                                <p> </p>
+                                <div class="form-group">
+                                    <label>Cost</label>
+                                    <input type="text" class="form-control" name="activityCost" value="<%= activity.activityCost %>">
+                                </div>
+                                <div class="form-group">
+                                    <p><label>Category</label></p>
+                                    <select name="activityCat">
+				                                  <%if (activity.activityCat=="WeddingPlace"){%>
+	                                           <option selected value="WeddingPlace">Wedding Place</option>
+	                                            <option value="Decoration">Decoration</option>
+				                                          <%} %>
+				                                              <%if (activity.activityCat=="Decoration"){%>
+	                                                       <option value="WeddingPlace">Wedding Place</option>
+	                                                       <option selected value="Decoration">Decoration</option>
+				                                                    <%} %>
+                                    </select>
+                                </div>
+                                <p><label>Rating</label></p>
+                                <div class="form-group">
+                                    <div class="stars">
+                                        <%if (activity.userRating==5){%>
+                                            <input class="star star-5" name="userRating" id="star-5" type="radio" name="star" value=5 checked>
+                                            <label class="star star-5" for="star-5"></label>
+                                            <input class="star star-4" name="userRating" id="star-4" type="radio" name="star" value=4>
+                                            <label class="star star-4" for="star-4"></label>
+                                            <input class="star star-3" name="userRating" id="star-3" type="radio" name="star" value=3>
+                                            <label class="star star-3" for="star-3"></label>
+                                            <input class="star star-2" name="userRating" id="star-2" type="radio" name="star" value=2>
+                                            <label class="star star-2" for="star-2"></label>
+                                            <input class="star star-1" name="userRating" id="star-1" type="radio" name="star" value=1>
+                                            <label class="star star-1" for="star-1"></label>
+                                            <%} %>
+                                                <%if (activity.userRating==4){%>
+                                                    <input class="star star-5" name="userRating" id="star-5" type="radio" name="star" value=5>
+                                                    <label class="star star-5" for="star-5"></label>
+                                                    <input class="star star-4" name="userRating" id="star-4" type="radio" name="star" value=4 checked>
+                                                    <label class="star star-4" for="star-4"></label>
+                                                    <input class="star star-3" name="userRating" id="star-3" type="radio" name="star" value=3>
+                                                    <label class="star star-3" for="star-3"></label>
+                                                    <input class="star star-2" name="userRating" id="star-2" type="radio" name="star" value=2>
+                                                    <label class="star star-2" for="star-2"></label>
+                                                    <input class="star star-1" name="userRating" id="star-1" type="radio" name="star" value=1>
+                                                    <label class="star star-1" for="star-1"></label>
+                                                    <%} %>
+                                                        <%if (activity.userRating==3){%>
+                                                            <input class="star star-5" name="userRating" id="star-5" type="radio" name="star" value=5>
+                                                            <label class="star star-5" for="star-5"></label>
+                                                            <input class="star star-4" name="userRating" id="star-4" type="radio" name="star" value=4>
+                                                            <label class="star star-4" for="star-4"></label>
+                                                            <input class="star star-3" name="userRating" id="star-3" type="radio" name="star" value=3 checked>
+                                                            <label class="star star-3" for="star-3"></label>
+                                                            <input class="star star-2" name="userRating" id="star-2" type="radio" name="star" value=2>
+                                                            <label class="star star-2" for="star-2"></label>
+                                                            <input class="star star-1" name="userRating" id="star-1" type="radio" name="star" value=1>
+                                                            <label class="star star-1" for="star-1"></label>
+                                                            <%} %>
+                                                                <%if (activity.userRating==2){%>
+                                                                    <input class="star star-5" name="userRating" id="star-5" type="radio" name="star" value=5>
+                                                                    <label class="star star-5" for="star-5"></label>
+                                                                    <input class="star star-4" name="userRating" id="star-4" type="radio" name="star" value=4>
+                                                                    <label class="star star-4" for="star-4"></label>
+                                                                    <input class="star star-3" name="userRating" id="star-3" type="radio" name="star" value=3>
+                                                                    <label class="star star-3" for="star-3"></label>
+                                                                    <input class="star star-2" name="userRating" id="star-2" type="radio" name="star" value=2 checked>
+                                                                    <label class="star star-2" for="star-2"></label>
+                                                                    <input class="star star-1" name="userRating" id="star-1" type="radio" name="star" value=1>
+                                                                    <label class="star star-1" for="star-1"></label>
+                                                                    <%} %>
+                                                                        <%if (activity.userRating==1){%>
+                                                                            <input class="star star-5" name="userRating" id="star-5" type="radio" name="star" value=5>
+                                                                            <label class="star star-5" for="star-5"></label>
+                                                                            <input class="star star-4" name="userRating" id="star-4" type="radio" name="star" value=4>
+                                                                            <label class="star star-4" for="star-4"></label>
+                                                                            <input class="star star-3" name="userRating" id="star-3" type="radio" name="star" value=3>
+                                                                            <label class="star star-3" for="star-3"></label>
+                                                                            <input class="star star-2" name="userRating" id="star-2" type="radio" name="star" value=2>
+                                                                            <label class="star star-2" for="star-2"></label>
+                                                                            <input class="star star-1" name="userRating" id="star-1" type="radio" name="star" value=1 checked>
+                                                                            <label class="star star-1" for="star-1"></label>
+                                                                            <%} %>
+                                    </div>
+                                </div>
+                                <button type="submit" class="btn btn-danger">Save</button>
+                                <button type="button" class="btn btn-danger" onclick="location.href='/plans/<%=planid%>/updateActivity/<%= activity.id %>';">Reset</button>
+                                <button type="button" class="btn btn-danger" onclick="location.href='/plans/<%=planid%>';">Back</button>
+                            </form>
+                </div>
+                <!-- End Register Box -->
+            </div>
+        <%- include ../partials/closeBody.ejs %>
+</body>
+
+</html>
+<!-- === END FOOTER === -->

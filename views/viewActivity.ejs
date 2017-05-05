@@ -1,0 +1,47 @@
+<!-- views/createActivity.ejs -->
+<!doctype html>
+<html>
+<head>
+	<title>Activity List</title>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"> <!-- load bootstrap css -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"> <!-- load fontawesome -->
+	<style>
+		body 		{ padding-top:80px; }
+	</style>
+</head>
+<body>
+<div class="container">
+
+<div class="col-sm-6 col-sm-offset-3">
+
+	<h2>List of Activity</h2>
+	<button type="button" class="btn btn-danger" onclick="location.href='/createActivity';">Create Activity</button>
+	<button type="button" class="btn btn-danger" onclick="location.href='home';">Back</button>
+	<br>
+	<br>
+	<br>
+
+	<% activity.forEach(function(detail){%>
+		<h2><span class="fa fa-user-o">
+			Activity
+			<!--<a href="/updateActivity/<%= detail.id %>" role=button>Edit</a>-->
+			<button type="button" class="btn btn-danger" onclick="location.href='/updateActivity/<%= detail.id %>';">
+				Update
+			</button>
+			<button type="button" class="btn btn-default btn-sm" onclick="location.href='/delActivity/<%= detail.id %>';">
+				Delete
+			</button>
+		</h2>
+		<p>Subject : <%= detail.activitySub %></p>
+		<p>Content : <%= detail.activityContent %></p>
+		<p>Time : <%= detail.activityTime %></p>
+		<p>Location : <%= detail.activityLoc %></p>
+		<p>Cost : <%= detail.activityCost %></p>
+		<p>Rating : <%= detail.userRating %></p>
+		
+	<% }); %>
+</div>
+
+</div>
+</body>
+</html>

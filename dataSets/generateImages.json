@@ -1,0 +1,12 @@
+[
+  '{{repeat(1000)}}',
+  {
+    _id: 'ObjectId('+'{{objectId()}}'+')',
+    imageName: '{{integer(1, 20)}}'+'.jpg',
+    path: function(tags){
+      return 'public/images/activity/'+this.imageName;},
+    activityID: 'ObjectId',
+    __v : 0
+  }
+
+]

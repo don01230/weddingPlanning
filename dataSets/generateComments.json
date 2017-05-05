@@ -1,0 +1,12 @@
+[
+  '{{repeat(1000)}}',
+  {
+    _id: 'ObjectId('+'{{objectId()}}'+')',
+    comments: '{{lorem(1, "sentences")}}',
+    date: '{{date()}}',
+    activityID: 'ObjectId',
+    userID: 'ObjectId',
+    __v : 0
+  }
+
+]

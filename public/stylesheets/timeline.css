@@ -1,0 +1,204 @@
+* {
+    box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+}
+
+textarea {
+    -webkit-border-radius: 8px;
+    -moz-border-radius: 8px;
+    border-radius: 8px;
+    color: #9e9e9e;
+}
+
+.wrapper {
+    position: relative;
+    padding: 50px 5%;
+    margin: 2%;
+    overflow: hidden;
+}
+.timeline {
+    position: absolute;
+    width: 4px;
+    top: 25px;
+    bottom: 25px;
+    left: 50%;
+    margin-left: -2px;
+    background: #eee;
+    -webkit-transition: 600ms cubic-bezier(0.68, -0.67, 0.14, 1.51);
+    transition: 600ms cubic-bezier(0.68, -0.67, 0.14, 1.51);
+}
+.timeline:p{
+  color:#9e9e9e;
+}
+.timeline:after {
+    content: " ";
+    width: 50px;
+    height: 50px;
+    position: absolute;
+    background: #eee;
+    border-radius: 50%;
+    bottom: -50px;
+    left: -23px;
+}
+
+.timeline:before {
+    content: " ";
+    width: 50px;
+    height: 50px;
+    position: absolute;
+    background: #eee;
+    border-radius: 50%;
+    left: -23px;
+    top: -50px;
+}
+
+.momentscontainer {
+    padding-top: 40px;
+    margin: auto;
+    max-width: 1200px;
+}
+
+.moment {
+  background-color: rgb(198, 228, 238)
+}
+
+.moment {
+    clear: both;
+    color: #fff;
+    padding: 25px 40px 30px;
+    width: 50%;
+    margin: 0% -30px 100px;
+    position: relative;
+    -webkit-transition: 800ms cubic-bezier(0.68, -0.67, 0.14, 1.51);
+    transition: 800ms cubic-bezier(0.68, -0.67, 0.14, 1.51);
+}
+
+.moment:first-child {
+    margin-top: 0;
+}
+
+.moment.right {
+    float: right;
+    padding-right: 10px;
+    padding-top:10px;
+}
+
+.moment.left {
+    float: left;
+    padding-right: 10px;
+    padding-top:10px;
+}
+
+.moment:after {
+    content: " ";
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 7.5px 15px 7.5px 0;
+    border-color: transparent #c6e4ee transparent transparent;
+    position: absolute;
+    top: 20px;
+    left: -15px;
+}
+
+.moment:before {
+    content: " ";
+    position: absolute;
+    top: 16px;
+    left: -40px;
+    background-color:  #fff;
+    height: 20px;
+    width: 20px;
+    border-radius: 50%;
+    border: 6px solid #4f5e93;
+}
+
+.moment.left:before {
+    left: auto;
+    right: -40px;
+}
+
+.moment.left:after {
+    left: auto;
+    right: -15px;
+    border-width: 7.5px 0 7.5px 15px;
+    border-color: transparent transparent transparent #00b18b;
+}
+
+.date {
+    position: absolute;
+    top: -40px;
+    width: 100%;
+}
+
+.photo{
+    overflow:visible;
+}
+
+.moment.right .date {
+    text-align: left;
+    right: 0;
+}
+
+.moment.left .date {
+    text-align: right;
+    left: 0;
+}
+
+.date h4 {
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    font-size: 11px;
+    font-weight: 200;
+    color: #fff;
+}
+
+.name, .desc {
+    font-weight: 200;
+    line-height: 1;
+}
+
+.desc {
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+@media screen and (min-width: 1200px) {
+    .moment {
+        margin-top: -45px;
+    }
+}
+h1,p,h3 {
+    color: #9e9e9e;
+}
+@media screen and (max-width: 600px) {
+    .moment {
+        margin: 25px 0 25px 30px;
+        width: 95%;
+        -webkit-transition: 700ms cubic-bezier(0.48, -0.67, 0.14, 1.21);
+        transition: 700ms cubic-bezier(0.48, -0.67, 0.14, 1.21);
+    }
+    .moment.left, .moment.right {
+        float: left;
+    }
+    .moment.left .date {
+        text-align: left;
+        left: 0;
+    }
+    .moment.left:before {
+        right: auto;
+        left: -47px;
+    }
+    .moment.left:after {
+        right: auto;
+        left: -15px;
+        border-width: 7.5px 15px 7.5px 0;
+        border-color: transparent #009970 transparent transparent;
+    }
+    .moment.right:before {
+        left: -47px;
+    }
+    .timeline {
+        left: 5%;
+    }
+}

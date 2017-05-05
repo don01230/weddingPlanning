@@ -1,0 +1,47 @@
+<!-- views/profile.ejs -->
+<!doctype html>
+<html>
+<head>
+	<title>Node Authentication</title>
+	<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css">
+	<link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css">
+	<style>
+		body 		{ padding-top:80px; word-wrap:break-word; }
+	</style>
+</head>
+<body>
+<div class="container">
+
+	<div class="page-header text-center">
+		<h1><span class="fa fa-anchor"></span> Plan Detail Page</h1>
+		<a href="/userplanslist" class="btn btn-default btn-sm">Back</a>
+	</div>
+
+	<div class="row">
+		<!-- LOCAL INFORMATION -->
+		<div class="col-sm-6">
+			<div class="well">
+				<h3><span class="fa fa-user"></span>Create By : <%= user.local.username %></h3>
+        <form action="/plans/<%=plan._id %>" method="post">
+          <div class="form-group">
+            <label>Plan Name</label>
+            <input type="planName" class="form-control" name="planName" value=<%= plan.planName%>>
+          </div>
+          <div class="form-group">
+            <label>Private</label>
+            <input type="checkbox" class="form-control" id="private" name="private" >
+          </div>
+          <p>
+            <strong>Plan Create Time</strong>: <%= plan.planTime %><br>
+            <strong>Plan Update Time</strong>: <%= plan.updateTime %><br>
+          </p>
+          <button type="submit" class="btn btn-danger">Save</button>
+        </form>
+      </div>
+		</div>
+
+	</div>
+
+</div>
+</body>
+</html>

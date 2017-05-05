@@ -1,0 +1,41 @@
+//reference source:
+//https://blog.gtwang.org/programming/getting-started-google-maps-javascript-api/
+<!DOCTYPE html>
+<html>
+  <head>
+    <style type="text/css">
+      html, body, #map-canvas { height: 100%; margin: 0; padding: 0;}
+    </style>
+    <script type="text/javascript"
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDZJ2rQ-cRyGoziVpfC3gFnzmIyE6t5o3w">
+    </script>
+    <script type="text/javascript">
+      function initialize() {
+        var mapOptions = {
+          center: { lat: 22.25, lng: 114.1667},
+          zoom: 8
+        };
+        var map = new google.maps.Map(
+            document.getElementById('map-canvas'),
+            mapOptions);
+      }
+      google.maps.event.addDomListener(
+          window, 'load', initialize);
+    </script>
+		<title>Wedding Activity and Planning Sharing Platform</title>
+		<!-- Latest compiled and minified CSS -->
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+		<!-- Optional theme -->
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css">
+		<!-- Latest compiled and minified JavaScript -->
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"> <!-- load fontawesome -->
+		<meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+
+  </head>
+  <body>
+<div><h2>Google Maps</h2></div>
+<button type="button" class="btn btn-danger" onclick="location.href='/home';">Go Back</button>
+<div id="map-canvas"></div>
+  </body>
+</html>

@@ -1,0 +1,132 @@
+<!-- === BEGIN HEADER === -->
+<!DOCTYPE html>
+<!--[if IE 8]> <html lang="en" class="ie8"> <![endif]-->
+<!--[if IE 9]> <html lang="en" class="ie9"> <![endif]-->
+<!--[if !IE]><!-->
+<html lang="en">
+    <!--<![endif]-->
+    <head>
+        <% include ../partials/header %>
+				<script>
+				function validateForm(){
+					var email=document.forms["loginForm"]["email"].value;
+					var password=document.forms["loginForm"]["password"].value;
+					if(email==null || email=="" || password==null || password==""){
+						alert("please fill all required field");
+						return false;
+					}
+				}
+				</script>
+    </head>
+    <body>
+        <div id="body_bg">
+            <div id="container_header" class="container">
+                <div id="header" class="row">
+                    <div class="col-md-12 margin-top-15">
+                        <!-- Header Social Icons -->
+                        <ul class="social-icons circle pull-right">
+                            <li class="social-rss">
+                                <a href="" target="" title="RSS"></a>
+                            </li>
+                            <li class="social-twitter">
+                                <a href="" target="" title="Twitter"></a>
+                            </li>
+                            <li class="social-facebook">
+                                <a href="" target="" title="Facebook"></a>
+                            </li>
+                            <li class="social-googleplus">
+                                <a href="" target="" title="GooglePlus"></a>
+                            </li>
+                        </ul>
+                        <!-- End Header Social Icons -->
+                    </div>
+                    <div class="clear"></div>
+                </div>
+            </div>
+            <div class="primary-container-group">
+                <!-- Background -->
+                <div class="primary-container-background">
+                    <div class="primary-container"></div>
+                    <div class="clearfix"></div>
+                </div>
+                <!--End Background -->
+                <div class="primary-container">
+                    <div id="container_hornav" class="container no-padding">
+                        <!-- Logo -->
+                        <div class="logo">
+													<a href="">
+															<!--<img src="assets/img/logo.png" alt="Logo" />-->
+															Wedding
+													</a>
+                        </div>
+                        <!-- End Logo -->
+                        <!-- Slogan -->
+                        <p class="site-slogan">A Wedding Planning and Sharing Platform</p>
+                        <!-- End Slogan -->
+                        <!-- Top Menu -->
+                        <div class="row">
+                            <div class="hornav-block">
+                                <div id="hornav" class="pull-right">
+                                    <ul id="hornavmenu" class="nav navbar-nav">
+                                      <li>
+                                          <a href="/home">Home</a>
+                                      </li>
+                                      <li>
+                                          <a href="/login">Login</a>
+                                      </li>
+                                      <li>
+                                          <a href="/signup">Sign Up</a>
+                                      </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="clearfix"></div>
+                        </div>
+                        <!-- End Top Menu -->
+                    </div>
+                    <div class="container">
+                        <!-- === END HEADER === -->
+                        <!-- === BEGIN CONTENT === -->
+                        <div class="container">
+                            <div class="row margin-vert-30">
+                                <!-- Login Box -->
+                                <div class="col-md-6 col-md-offset-3 col-sm-offset-3">
+																	<% if (message.length > 0) { %>
+																		<div class="alert alert-danger"><%= message %></div>
+																	<% } %>
+                                    <form class="login-page" action="/login" method="post" name="loginForm" onsubmit="return validateForm()">
+                                        <div class="login-header margin-bottom-30">
+                                            <h2>Login to your account</h2>
+                                        </div>
+                                        <div class="input-group margin-bottom-20">
+                                            <span class="input-group-addon">
+                                                <i class="fa fa-user"></i>
+                                            </span>
+                                            <input placeholder="Email" class="form-control" type="text" name="email">
+                                        </div>
+                                        <div class="input-group margin-bottom-20">
+                                            <span class="input-group-addon">
+                                                <i class="fa fa-lock"></i>
+                                            </span>
+                                            <input placeholder="Password" class="form-control" type="password" name="password">
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <button class="btn btn-primary " type="submit" >Login</button>
+																								<button class="btn btn-primary " type="button" onclick="location.href='/signup';">Sign Up</button>
+                                            </div>
+                                        </div>
+                                        <hr>
+                                        <h4>Forget your Password ?</h4>
+                                        <p>
+                                            <a class="color-pink" href="#">Click here </a> to reset your password.</p>
+                                    </form>
+                                </div>
+                                <!-- End Login Box -->
+                            </div>
+                        </div>
+                        <% include ../partials/closeBody %>
+
+    </body>
+</html>
+<!-- === END FOOTER === -->
